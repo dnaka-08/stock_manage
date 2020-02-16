@@ -29,5 +29,9 @@ module StockManage
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # タイムゾーン設定
+    config.time_zone = 'Tokyo'
   end
 end
+

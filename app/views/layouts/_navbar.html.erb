@@ -1,0 +1,25 @@
+<header class="mb-4">
+  <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">在庫管理</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <% if logged_in? %>
+          <li class="nav-item"><%= link_to '在庫登録', new_stock_detail_path, class: 'nav-link' %></li>
+          <% if @user.id != nil %>
+            <li class="nav-item"><%= link_to 'ユーザ情報編集', edit_user_path(@user), class: 'nav-link' %></li>
+          <% end %>
+          <% if @root.admin %>
+            <li class="nav-item"><%= link_to 'ユーザ管理', users_path, class: 'nav-link' %></li>
+            <li class="nav-item"><%= link_to '店舗管理', stores_path, class: 'nav-link' %></li>
+            <li class="nav-item"><%= link_to '商品管理', products_path, class: 'nav-link' %></li>
+          <% end %>
+          <li class="nav-item"><%= link_to 'ログアウト', logout_path, method: :delete, class: 'nav-link' %></li>
+        <% end %>
+      </ul>
+    </div>
+  </nav>
+</header>

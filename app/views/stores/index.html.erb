@@ -1,0 +1,34 @@
+<div class="row justify-content-center">
+  <h1>店舗一覧</h1>
+</div>
+
+<div class="row justify-content-start mb-2">
+  <%= link_to '新規登録', new_store_path, class: 'btn btn-primary offset-sm-8' %>
+</div> 
+
+<% if @stores.any? %>
+  <div class="row justify-content-center">
+      <table class="table table-striped table-bordered col-sm-6">
+        <thead>
+          <tr>
+            <th>店舗名</th>
+            <th class="text-center" width="20%">削除</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @stores.each do |store| %>
+            <tr>
+              <td><%= link_to store.name, edit_store_path(store) %></td>
+              <td class="text-center" width="20%"><%= link_to '削除', store, method: :delete, data: { confirm: '削除してもよろしいですか？' }, class: 'btn btn-danger' %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+  </div>
+ 
+  <div class="row justify-content-start">
+    <div class="offset-sm-7">
+      <%= paginate @stores %>
+    </div>
+  </div>  
+<% end %>
