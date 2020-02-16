@@ -5,9 +5,9 @@ class TopsController < ApplicationController
   
   def index
     if @user.admin
-      @stocks = Stock.joins(:store, :product).where('date <= ?', Time.zone.now).group("stocks.store_id").group("stocks.product_id").select("stocks.*, sum(stocks.total_number) as total_number, stores.name as store_name, products.name as product_name")
+      @stocks = Stock.joins(:store, :product).where('date <= ?', Time.zone.now).group("stocks.store_id").group("stocks.product_id").select("stocks.store_id, stocks.product_id, sum(stocks.total_number) as total_number, stores.name as store_name, products.name as product_name")
     else
-      @stocks = Stock.joins(:store, :product).where('stocks.store_id = ? and date <= ?', @user.store_id, Time.zone.now).group("stocks.store_id").group("stocks.product_id").select("stocks.*, sum(stocks.total_number) as total_number, stores.name as store_name, products.name as product_name")
+      @stocks = Stock.joins(:store, :product).where('stocks.store_id = ? and date <= ?', @user.store_id, Time.zone.now).group("stocks.store_id").group("stocks.product_id").select("stocks.store_id, stocks.product_id, sum(stocks.total_number) as total_number, stores.name as store_name, products.name as product_name")
     end
     
     if @user.admin
