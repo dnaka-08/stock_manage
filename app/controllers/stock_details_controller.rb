@@ -1,4 +1,5 @@
 class StockDetailsController < ApplicationController
+  before_action :require_user_logged_in
   before_action :set_root, only: [:index, :new]
   before_action :set_user_session, only: [:index, :new]
   before_action :set_stock_detail, only: [:destroy]
