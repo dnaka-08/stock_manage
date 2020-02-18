@@ -41,10 +41,15 @@ class StoresController < ApplicationController
   end
 
   def destroy
-    @store.destroy
+
+    if @store.destroy
+      flash[:success] = '正常に削除されました。'
+      redirect_back(fallback_location: root_path)
+    else
+      flash.now[:danger] = '削除されませんでした。'
+      redirect_back(fallback_location: root_path)
+    end
     
-    flash[:success] = '正常に削除されました。'
-    redirect_back(fallback_location: root_path)
   end
   
   private
