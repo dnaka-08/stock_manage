@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :require_user_logged_in, only: [:index, :edit, :update, :destroy]
   before_action :require_admin_user, only: [:index, :destroy]
   before_action :set_user, only: [:edit, :update, :destroy]
-  before_action :set_root, only: [:index, :new, :edit]
+  before_action :set_root, only: [:index, :new, :edit, :create]
   before_action :set_user_session, only: [:index]
   
   def index

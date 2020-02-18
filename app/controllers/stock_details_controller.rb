@@ -1,7 +1,7 @@
 class StockDetailsController < ApplicationController
   before_action :require_user_logged_in
-  before_action :set_root, only: [:index, :new]
-  before_action :set_user_session, only: [:index, :new]
+  before_action :set_root, only: [:index, :new, :create]
+  before_action :set_user_session, only: [:index, :new, :create]
   before_action :set_stock_detail, only: [:destroy]
 
   def index
@@ -26,13 +26,13 @@ class StockDetailsController < ApplicationController
     end
     
     @stock = Stock.where('store_id = ? and product_id = ? and date = ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date)
-    if @stock.count == 0
+    if @stock.count == 0 and @stock_detail.number.nil? == false
       if @stock_detail.operation_id == 1
         @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number)
       else
         @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number * (-1))
       end
-    else
+    elsif @stock_detail.number.nil? == false
       if @stock_detail.operation_id == 1
         @stock.first.total_number = @stock.first.total_number + @stock_detail.number
         @stock.first.save
