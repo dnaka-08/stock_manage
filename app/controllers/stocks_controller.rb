@@ -4,8 +4,16 @@ class StocksController < ApplicationController
   before_action :set_user_session, only: [:index]
 
   def index
-    @stocks = Stock.joins(:store, :product).where("store_id = ? and product_id = ?", params[:store_id], params[:product_id]).order(date: :desc).page(params[:page]).per(15)
+    @stocks = Stock.joins(:store, :product).where("store_id = ? and product_id = ?", params[:store_id], params[:product_id]).order(date: :desc).page(params[:page]).per(5)
     @store = Store.find(params[:store_id])
     @product = Product.find(params[:product_id])
+    
+    date_col = Stock.where("store_id = ? and product_id = ?", params[:store_id], params[:product_id]).order(date: :asc).pluck("date")
+    total_col = Stock.where("store_id = ? and product_id = ?", params[:store_id], params[:product_id]).order(date: :asc).pluck("stock_number")
+    @sample = LazyHighCharts::HighChart.new('graph') do |f|
+      f.title(text: '月の在庫の推移')
+      f.xAxis(categories: date_col)
+      f.series(name: '在庫数', data: total_col)
+    end
   end
 end

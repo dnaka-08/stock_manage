@@ -27,17 +27,33 @@ class StockDetailsController < ApplicationController
     
     @stock = Stock.where('store_id = ? and product_id = ? and date = ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date)
     if @stock.count == 0 and @stock_detail.number.nil? == false
-      if @stock_detail.operation_id == 1
-        @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number)
+      @stock_before = Stock.where('store_id = ? and product_id = ? and date < ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date).order(date: :desc).first
+      @stock_after = Stock.where('store_id = ? and product_id = ? and date > ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date)
+      if @stock_before.nil? == false
+        if @stock_detail.operation_id == 1
+          @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number, stock_number: @stock_before.stock_number + @stock_detail.number)
+          @stock_after.update_all("stock_number = stock_number + #{@stock_detail.number}")
+        else
+          @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number * (-1), stock_number: @stock_before.stock_number - @stock_detail.number)
+          @stock_after.update_all("stock_number = stock_number - #{@stock_detail.number}")
+        end
       else
-        @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number * (-1))
+        if @stock_detail.operation_id == 1
+          @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number, stock_number: @stock_detail.number)
+          @stock_after.update_all("stock_number = stock_number + #{@stock_detail.number}")
+        else
+          @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number * (-1), stock_number: @stock_detail.number * (-1))
+          @stock_after.update_all("stock_number = stock_number - #{@stock_detail.number}")
+        end
       end
     elsif @stock_detail.number.nil? == false
       if @stock_detail.operation_id == 1
         @stock.first.total_number = @stock.first.total_number + @stock_detail.number
+        @stock.first.stock_number = @stock.first.stock_number + @stock_detail.number
         @stock.first.save
       else
         @stock.first.total_number = @stock.first.total_number - @stock_detail.number
+        @stock.first.stock_number = @stock.first.stock_number - @stock_detail.number
         @stock.first.save
       end
     end
@@ -47,12 +63,15 @@ class StockDetailsController < ApplicationController
     
     @stock = Stock.where('store_id = ? and product_id = ? and date = ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date)
 
+    @stock_after = Stock.where('store_id = ? and product_id = ? and date >= ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date)
     if @stock_detail.operation_id == 1
       @stock.first.total_number = @stock.first.total_number - @stock_detail.number
       @stock.first.save
+      @stock_after.update_all("stock_number = stock_number - #{@stock_detail.number}")
     else
       @stock.first.total_number = @stock.first.total_number + @stock_detail.number
       @stock.first.save
+      @stock_after.update_all("stock_number = stock_number + #{@stock_detail.number}")
     end
 
     @stock_detail.destroy

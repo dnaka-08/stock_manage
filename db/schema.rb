@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_10_182142) do
+ActiveRecord::Schema.define(version: 2020_02_29_013413) do
 
   create_table "operations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 2020_02_10_182142) do
     t.integer "total_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "stock_number"
     t.index ["product_id"], name: "index_stocks_on_product_id"
     t.index ["store_id"], name: "index_stocks_on_store_id"
   end
@@ -64,7 +65,6 @@ ActiveRecord::Schema.define(version: 2020_02_10_182142) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "store_id"
-    t.integer "stores_id"
     t.index ["store_id"], name: "index_users_on_store_id"
   end
 

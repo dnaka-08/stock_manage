@@ -58,6 +58,11 @@ gem 'kaminari'
 
 gem 'pry-byebug', group: :development
 
+gem 'lazy_high_charts' # グラフ
+
+gem 'chartkick' #グラフ
+gem 'groupdate' #グラフ
+
 group :production do
   gem 'pg', '>= 0.18', '< 2.0'
 end
