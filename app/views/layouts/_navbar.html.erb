@@ -13,6 +13,7 @@
             <li class="nav-item"><%= link_to 'ユーザ情報編集', edit_user_path(@user), class: 'nav-link' %></li>
           <% end %>
           <% if @root.admin %>
+            <li class="nav-item"><%= link_to '在庫管理表', mng_tables_path, class: 'nav-link' %></li>
             <li class="nav-item"><%= link_to 'ユーザ管理', users_path, class: 'nav-link' %></li>
             <li class="nav-item"><%= link_to '店舗管理', stores_path, class: 'nav-link' %></li>
             <li class="nav-item"><%= link_to '商品管理', products_path, class: 'nav-link' %></li>
