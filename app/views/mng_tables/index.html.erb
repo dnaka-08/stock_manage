@@ -1,3 +1,7 @@
+<div class="row justify-content-end">
+  <%= button_to "前月", {contraller: 'mng_tables', action: 'index'}, {method: :get, params: {date: session[:date], target: 'before'}, class: 'btn btn-info mb-2 ml-1'} %>
+  <%= button_to "翌月", {contraller: 'mng_tables', action: 'index'}, {method: :get, params: {date: session[:date], target: 'after'}, class: 'btn btn-info mb-2 ml-1'} %>
+</div>
 
 <div class="row">
   <div class="table-responsive">
@@ -6,7 +10,7 @@
         <tr>
           <th style="width:100px;">店舗</th>
           <th style="width:80px;">入庫／出庫</th>
-          <% (Date.parse('2020-03-01')..Date.parse('2020-03-31')).each do |date| %>
+          <% (Date.parse(@date_begin)..Date.parse(@date_end)).each do |date| %>
             <th style="width:60px;"><%= date.strftime('%m/%d') %></th>
           <% end %>
         </tr>
