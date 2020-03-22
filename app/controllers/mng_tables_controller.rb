@@ -76,7 +76,7 @@ class MngTablesController < ApplicationController
         pdf = PDFKit.new(html, encoding: "UTF-8")
         pdf.stylesheets << "#{Rails.root}/app/assets/stylesheets/bootstrap.min.css"
         send_data pdf.to_pdf,
-          filename: "mng_table.pdf",
+          filename: "在庫管理表_#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.pdf",
           type: "application/pdf",
           disposition: "inline"
       end
