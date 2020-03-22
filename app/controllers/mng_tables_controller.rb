@@ -10,6 +10,9 @@ class MngTablesController < ApplicationController
     elsif params[:target] == 'after' 
       @date_begin = (Date.strptime(params[:date], '%Y-%m-%d') >> 1).beginning_of_month.to_s
       @date_end = (Date.strptime(params[:date], '%Y-%m-%d') >> 1).end_of_month.to_s
+    elsif params[:target] == 'now' 
+      @date_begin = (Date.strptime(params[:date], '%Y-%m-%d')).beginning_of_month.to_s
+      @date_end = (Date.strptime(params[:date], '%Y-%m-%d')).end_of_month.to_s
     else
       @date_begin = Date.today.beginning_of_month.to_s
       @date_end = Date.today.end_of_month.to_s
@@ -63,6 +66,20 @@ class MngTablesController < ApplicationController
         end
       end
       @mng_table.push(@mng_rec)
+    end
+    
+    
+    respond_to do |format|
+      format.html
+      format.pdf do
+        html = render_to_string template: "mng_tables/index"
+        pdf = PDFKit.new(html, encoding: "UTF-8")
+        pdf.stylesheets << "#{Rails.root}/app/assets/stylesheets/bootstrap.min.css"
+        send_data pdf.to_pdf,
+          filename: "mng_table.pdf",
+          type: "application/pdf",
+          disposition: "inline"
+      end
     end
   end
 end

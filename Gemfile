@@ -58,7 +58,13 @@ gem 'kaminari'
 
 gem 'pry-byebug', group: :development
 
-gem 'lazy_high_charts' # グラフ
+# グラフ
+gem 'lazy_high_charts'
+# PDF
+gem 'pdfkit'
+gem 'wkhtmltopdf'
+gem 'wkhtmltopdf-binary'
+gem 'wicked_pdf'
 
 group :production do
   gem 'pg', '>= 0.18', '< 2.0'
