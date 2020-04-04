@@ -12,7 +12,13 @@
           <th style="width:100px;">店舗</th>
           <th style="width:80px;">入庫／出庫</th>
           <% (Date.parse(@date_begin)..Date.parse(@date_end)).each do |date| %>
-            <th style="width:60px;"><%= date.strftime('%m/%d') %></th>
+            <% if date.saturday? %>
+              <th style="width:60px;" bgcolor="#bbdbf3"><%= date.strftime('%m/%d') %></th>
+            <% elsif date.sunday? or date.workday? == false %>
+              <th style="width:60px;" bgcolor="#f6bfbc"><%= date.strftime('%m/%d') %></th>
+            <% else %>
+              <th style="width:60px;"><%= date.strftime('%m/%d') %></th>
+            <% end %>
           <% end %>
         </tr>
         <tbody>
@@ -24,6 +30,14 @@
                   <% @w_value = value %>
                   <td rowspan="4"><%= value %></td>
                 <% elsif key == "store" %>
+                <% elsif key != "store" and key != "ope" %>
+                  <% if key.saturday? %>
+                    <td bgcolor="#bbdbf3"><%= value %></td>
+                  <% elsif key.sunday? or key.workday? == false %>
+                    <td bgcolor="#f6bfbc"><%= value %></td>
+                  <% else %>
+                    <td><%= value %></td>
+                  <% end %>
                 <% else %>
                   <td><%= value %></td>
                 <% end %>

@@ -48,6 +48,9 @@ GEM
     bootsnap (1.4.5)
       msgpack (~> 1.0)
     builder (3.2.4)
+    business_time (0.9.3)
+      activesupport (>= 3.2.0)
+      tzinfo
     byebug (11.1.1)
     coderay (1.1.2)
     coffee-rails (4.2.2)
@@ -196,6 +199,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.1.0)
+  business_time
   byebug
   coffee-rails (~> 4.2)
   jbuilder (~> 2.5)

@@ -1,0 +1,21 @@
+business_time:
+  beginning_of_workday: 9:00 am
+  end_of_workday: 5:00 pm
+  holidays:
+    - Jan 01, 2010
+    - July 4th, 2010
+    - December 25th, 2010
+    - April 29, 2020
+    - May 03, 2020
+    - May 04, 2020
+    - May 05, 2020
+    - May 06, 2020
+    - July 23, 2020
+    - July 24, 2020
+    - August 10, 2020
+  work_week:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
