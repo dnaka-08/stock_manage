@@ -12,4 +12,6 @@ Rails.application.routes.draw do
   resources :stocks, only: [:index]
   resources :stock_details, only: [:index, :new, :create, :destroy]
   resources :mng_tables, only:[:index]
+  resources :output_mng_talbles, only:[:index]
+  resources :distributes, only:[:new, :create]
 end
