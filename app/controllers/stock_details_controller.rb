@@ -25,7 +25,7 @@ class StockDetailsController < ApplicationController
         # 対象日付のデータなし
         if @stock_before.nil? == false
           # 前日以前の在庫あり
-          @stock_before.first.with_lock do
+          @stock_before.with_lock do
             if @stock_detail.operation_id == 1
               # 入庫
               @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number, stock_number: @stock_before.stock_number + @stock_detail.number)
@@ -79,7 +79,7 @@ class StockDetailsController < ApplicationController
   def destroy
     
     @stock = Stock.where('store_id = ? and product_id = ? and date = ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date)
-    @stock_after = Stock.where('store_id = ? and product_id = ? and date >= ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date)
+    @stock_after = Stock.where('store_id = ? and product_id = ? and date > ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date)
     
     @stock.first.with_lock do
       if @stock_detail.operation_id == 1
