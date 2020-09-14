@@ -11,9 +11,9 @@ class TopsController < ApplicationController
     end
     
     if @user.admin
-      @stock_details = StockDetail.joins(:user, :operation, :store, :product).order(id: :desc).select("stock_details.*, users.name as user_name, operations.name as operation_name, stores.name as store_name, products.name as product_name")
+      @stock_details = StockDetail.joins(:user, :operation, :store, :product).order(id: :desc).select("stock_details.*, users.name as user_name, operations.name as operation_name, stores.name as store_name, products.name as product_name").page(params[:page]).per(15)
     else
-      @stock_details = StockDetail.joins(:user, :operation, :store, :product).where('stock_details.store_id = ?', @user.store_id).order(id: :desc).select("stock_details.*, users.name as user_name, operations.name as operation_name, stores.name as store_name, products.name as product_name")
+      @stock_details = StockDetail.joins(:user, :operation, :store, :product).where('stock_details.store_id = ?', @user.store_id).order(id: :desc).select("stock_details.*, users.name as user_name, operations.name as operation_name, stores.name as store_name, products.name as product_name").page(params[:page]).per(15)
     end
   end
 end

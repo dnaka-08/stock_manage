@@ -19,10 +19,13 @@ class OutputMngTalblesController < ApplicationController
     end
     session[:date] = @date_begin
     
-    @stock_detail = StockDetail.joins(:operation, :store).where("stock_details.date >= '#{@date_begin}' and stock_details.date <= '#{@date_end}'").group("stores.name").group("stock_details.date").group("operations.name").select("stores.name as store_name, stock_details.date as date, operations.name as operation_name, sum(stock_details.number) as stock_sum")
-    @stock = Stock.joins(:store).where("stocks.date >= '#{@date_begin}' and stocks.date <= '#{@date_end}'").select("stores.name as store_name, stocks.date as date, stocks.total_number")
-    @stock_before = Stock.joins(:store).where("stocks.date < '#{@date_begin}'").group("stores.name").select("stores.name as store_name, sum(stocks.total_number) as total_number_sum")
-    @store = StockDetail.joins(:store).where("date >= '#{@date_begin}' and date <= '#{@date_end}'").select("stores.name as store_name").distinct
+    @product_id = params[:product_id] # 選択された商品ID
+    
+    @stock_detail = StockDetail.joins(:operation, :store).where("stock_details.date >= ? and stock_details.date <= ? and stock_details.product_id = ?", @date_begin, @date_end, @product_id).group("stores.name").group("stock_details.date").group("operations.name").select("stores.name as store_name, stock_details.date as date, operations.name as operation_name, sum(stock_details.number) as stock_sum")
+    @stock = Stock.joins(:store).where("stocks.date >= ? and stocks.date <= ? and stocks.product_id = ?", @date_begin, @date_end, @product_id).select("stores.name as store_name, stocks.date as date, stocks.total_number")
+    @stock_before = Stock.joins(:store).where("stocks.date < ? and stocks.product_id = ?", @date_begin, @product_id).group("stores.name").select("stores.name as store_name, sum(stocks.total_number) as total_number_sum")
+    @store = StockDetail.joins(:store).where("date >= ? and date <= ?", @date_begin, @date_end).select("stores.name as store_name").distinct
+    @product = Product.find(@product_id)
     @operation = Operation.all
 
     @mng_table = []
@@ -51,7 +54,7 @@ class OutputMngTalblesController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        html = render_to_string template: "output_mng_tables/index"
+        html = render_to_string template: "output_mng_talbles/index"
         pdf = PDFKit.new(html, encoding: "UTF-8")
         pdf.stylesheets << "#{Rails.root}/app/assets/stylesheets/bootstrap.min.css"
         send_data pdf.to_pdf,

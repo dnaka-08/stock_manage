@@ -91,13 +91,20 @@ class DistributesController < ApplicationController
   
   # 登録時チェック
   def register_check
-        #必須チェック
-    if params[:product_id] == "" or params[:dist_num] == ""
-      flash[:danger] = '対象商品か分配数のいずれかが未入力です。'
+    #必須チェック(対象商品)
+    if params[:product_id] == ""
+      flash[:danger] = '対象商品が未入力です。'
       redirect_back(fallback_location: root_path)
       return  
     end
     
+    #必須チェック(分配数)
+    if params[:dist_num] == ""
+      flash[:danger] = '分配数が未入力です。'
+      redirect_back(fallback_location: root_path)
+      return  
+    end
+
     #分配数数値チェック
     if params[:dist_num] !~ /^[0-9]+$/
       flash[:danger] = '分配数には数値を指定してください。'

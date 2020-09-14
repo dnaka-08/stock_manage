@@ -1,9 +1,14 @@
 <div class="row justify-content-end">
-  <%= link_to "PDF", mng_tables_path(format: "pdf", date: session[:date], target: "now"), class: 'btn btn-success mb-2 ml-1' %>
-  <%= button_to "前月", {contraller: 'mng_tables', action: 'index'}, {method: :get, params: {date: session[:date], target: 'before'}, class: 'btn btn-info mb-2 ml-1'} %>
-  <%= button_to "翌月", {contraller: 'mng_tables', action: 'index'}, {method: :get, params: {date: session[:date], target: 'after'}, class: 'btn btn-info mb-2 ml-1'} %>
+  <%= link_to "PDF", mng_tables_path(format: "pdf", date: session[:date], target: "now", product_id: @product_id), class: 'btn btn-success mb-2 ml-1' %>
+  <%= button_to "前月", {contraller: 'mng_tables', action: 'index'}, {method: :get, params: {date: session[:date], target: 'before', product_id: @product_id}, class: 'btn btn-info mb-2 ml-1'} %>
+  <%= button_to "翌月", {contraller: 'mng_tables', action: 'index'}, {method: :get, params: {date: session[:date], target: 'after', product_id: @product_id}, class: 'btn btn-info mb-2 ml-1'} %>
 </div>
 
+<div class="row justify-content-start">
+  <div class="col-sm-3 mb-3">
+    商品名：<%= @product.name %>
+  </div>
+</div>
 <div class="row">
   <div class="table-responsive">
     <table class="table table-striped table-bordered" style="table-layout:fixed; font-size:8pt;">
@@ -25,18 +30,40 @@
           <% @mng_table.each do |rec| %>    
             <tr>
               <% @w_value %>
+              <% @store_id %>
+              <% @product_id %>
+              <% @stock_flg = false %>
               <% rec.each do |key, value| %>
                 <% if key == "store" and @w_value != value %>
                   <% @w_value = value %>
                   <td rowspan="4"><%= value %></td>
+                <% elsif key == "ope" and value == "在庫" %>
+                  <% @stock_flg = true %>
+                  <td><%= value %></td>
                 <% elsif key == "store" %>
-                <% elsif key != "store" and key != "ope" %>
+                <% elsif key == "store_id" %>
+                  <% @store_id = value %>
+                <% elsif key == "product_id" %>
+                  <% @product_id = value %>
+                <% elsif key != "store" and key != "ope" and key != "store_id" and key != "product_id" %>
                   <% if key.saturday? %>
-                    <td bgcolor="#bbdbf3"><%= value %></td>
+                    <% if @stock_flg == false %>
+                      <td bgcolor="#bbdbf3"><%= value %></td>
+                    <% else %>
+                      <td bgcolor="#bbdbf3"><%= link_to value, new_stock_detail_path(:store_id => @store_id, :product_id => @product_id, :date => key.strftime('%Y-%m-%d')) %></td>
+                    <% end %>
                   <% elsif key.sunday? or key.workday? == false %>
-                    <td bgcolor="#f6bfbc"><%= value %></td>
+                    <% if @stock_flg == false %>
+                      <td bgcolor="#f6bfbc"><%= value %></td>
+                    <% else %>
+                      <td bgcolor="#f6bfbc"><%= link_to value, new_stock_detail_path(:store_id => @store_id, :product_id => @product_id, :date => key.strftime('%Y-%m-%d')) %></td>
+                    <% end %>
                   <% else %>
-                    <td><%= value %></td>
+                    <% if @stock_flg == false %>
+                      <td><%= value %></td>
+                    <% else %>
+                      <td><%= link_to value, new_stock_detail_path(:store_id => @store_id, :product_id => @product_id, :date => key.strftime('%Y-%m-%d')) %></td>
+                    <% end %>
                   <% end %>
                 <% else %>
                   <td><%= value %></td>
