@@ -64,13 +64,18 @@ class StockDetailsController < ApplicationController
               @stock.first.total_number = @stock.first.total_number - stock_detail.number
               @stock.first.save
               @stock_after.update_all("stock_number = stock_number - #{stock_detail.number}")
+            elsif stock_detail.operation_id == 2
+              # 出庫
+              @stock.first.total_number = @stock.first.total_number + stock_detail.number
+              @stock.first.out_number = @stock.first.out_number - stock_detail.number
+              @stock.first.save
+              @stock_after.update_all("stock_number = stock_number + #{stock_detail.number}")
             else
-              # 入庫以外
+              # 破棄
               @stock.first.total_number = @stock.first.total_number + stock_detail.number
               @stock.first.save
               @stock_after.update_all("stock_number = stock_number + #{stock_detail.number}")
             end
-            
             stock_detail.destroy
           end
         end        
