@@ -96,11 +96,15 @@ class StockDetailsController < ApplicationController
                 @stock_before.with_lock do
                   if @stock_detail.operation_id == 1
                     # 入庫
-                    @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number, stock_number: @stock_before.stock_number + @stock_detail.number)
+                    @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number, stock_number: @stock_before.stock_number + @stock_detail.number, out_number: 0)
                     @stock_after.update_all("stock_number = stock_number + #{@stock_detail.number}")
+                  elsif @stock_detail.operation_id == 2
+                    # 出庫
+                    @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number * (-1), stock_number: @stock_before.stock_number - @stock_detail.number, out_number: @stock_detail.number)
+                    @stock_after.update_all("stock_number = stock_number - #{@stock_detail.number}")
                   else
-                    # 入庫以外
-                    @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number * (-1), stock_number: @stock_before.stock_number - @stock_detail.number)
+                    # 破棄
+                    @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number * (-1), stock_number: @stock_before.stock_number - @stock_detail.number, out_number: 0)
                     @stock_after.update_all("stock_number = stock_number - #{@stock_detail.number}")
                   end
                 end
@@ -108,11 +112,15 @@ class StockDetailsController < ApplicationController
                 # 前日以前の在庫なし
                 if @stock_detail.operation_id == 1
                   # 入庫
-                  @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number, stock_number: @stock_detail.number)
+                  @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number, stock_number: @stock_detail.number, out_number: 0)
                   @stock_after.update_all("stock_number = stock_number + #{@stock_detail.number}")
+                elsif @stock_detail.operation_id == 2
+                  # 出庫
+                  @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number * (-1), stock_number: @stock_detail.number * (-1), out_number: @stock_detail.number)
+                  @stock_after.update_all("stock_number = stock_number - #{@stock_detail.number}")
                 else
-                  # 入庫以外
-                  @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number * (-1), stock_number: @stock_detail.number * (-1))
+                  # 破棄
+                  @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number * (-1), stock_number: @stock_detail.number * (-1), out_number: 0)
                   @stock_after.update_all("stock_number = stock_number - #{@stock_detail.number}")
                 end
               end
@@ -125,8 +133,15 @@ class StockDetailsController < ApplicationController
                   @stock.first.stock_number = @stock.first.stock_number + @stock_detail.number
                   @stock.first.save
                   @stock_after.update_all("stock_number = stock_number + #{@stock_detail.number}")
+                elsif @stock_detail.operation_id == 2
+                  # 出庫
+                  @stock.first.total_number = @stock.first.total_number - @stock_detail.number
+                  @stock.first.stock_number = @stock.first.stock_number - @stock_detail.number
+                  @stock.first.out_number = @stock.first.out_number + @stock_detail.number
+                  @stock.first.save
+                  @stock_after.update_all("stock_number = stock_number - #{@stock_detail.number}")
                 else
-                  # 入庫以外
+                  # 破棄
                   @stock.first.total_number = @stock.first.total_number - @stock_detail.number
                   @stock.first.stock_number = @stock.first.stock_number - @stock_detail.number
                   @stock.first.save
@@ -169,8 +184,14 @@ class StockDetailsController < ApplicationController
         @stock.first.total_number = @stock.first.total_number - @stock_detail.number
         @stock.first.save
         @stock_after.update_all("stock_number = stock_number - #{@stock_detail.number}")
+      elsif @stock_detail.operation_id == 2
+        # 出庫
+        @stock.first.total_number = @stock.first.total_number + @stock_detail.number
+        @stock.first.out_number = @stock.first.out_number - @stock_detail.number
+        @stock.first.save
+        @stock_after.update_all("stock_number = stock_number + #{@stock_detail.number}")
       else
-        # 入庫以外
+        # 破棄
         @stock.first.total_number = @stock.first.total_number + @stock_detail.number
         @stock.first.save
         @stock_after.update_all("stock_number = stock_number + #{@stock_detail.number}")

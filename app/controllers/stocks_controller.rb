@@ -9,11 +9,11 @@ class StocksController < ApplicationController
     @product = Product.find(params[:product_id])
     
     date_col = Stock.where("store_id = ? and product_id = ?", params[:store_id], params[:product_id]).order(date: :asc).pluck("date")
-    total_col = Stock.where("store_id = ? and product_id = ?", params[:store_id], params[:product_id]).order(date: :asc).pluck("stock_number")
+    total_col = Stock.where("store_id = ? and product_id = ?", params[:store_id], params[:product_id]).order(date: :asc).pluck("out_number")
     @sample = LazyHighCharts::HighChart.new('graph') do |f|
-      f.title(text: '在庫の推移')
+      f.title(text: '出庫の推移')
       f.xAxis(categories: date_col)
-      f.series(name: '在庫数', data: total_col)
+      f.series(name: '出庫数', data: total_col)
     end
   end
 end
