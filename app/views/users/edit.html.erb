@@ -21,7 +21,11 @@
       </div>
       <div class="form-group">
         <%= f.label :store_id, '対象店舗' %>
-        <%= f.collection_select :store_id, Store.all, :id, :name, :include_blank => true %>
+        <% if @root.admin %>
+          <%= f.collection_select :store_id, Store.all, :id, :name, :include_blank => true %>
+        <% else %>
+          <%= f.collection_select :store_id, Store.all, :id, :name, {:include_blank => true}, {:disabled => true} %>
+        <% end %>
       </div>
       
       <%= f.submit '更新', class: 'btn btn-primary btn-block' %>

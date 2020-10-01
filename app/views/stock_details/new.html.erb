@@ -5,7 +5,11 @@
     
       <div class="form-group">
         <%= f.label :store_id, '対象店舗：' %>
-        <%= f.collection_select :store_id, Store.all, :id, :name, :include_blank => true %>
+        <% if @user.store_id.nil? %>
+          <%= f.collection_select :store_id, Store.all, :id, :name, :include_blank => true %>
+        <% else %>
+          <%= f.collection_select :store_id, Store.where('id = ?', @user.store_id), :id, :name, :include_blank => true %>
+        <% end %>
       </div>
       <div class="form-group">
         <%= f.label :product_id, '対象商品：' %>
