@@ -55,3 +55,13 @@ production:
   database: stock_manage_production
   username: stock_manage
   password: <%= ENV['STOCK_MANAGE_DATABASE_PASSWORD'] %>
+
+production_docker:
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS'){ 5 } %>
+  username: postgres
+  password: <%= ENV.fetch('POSTGRES_PASSWORD'){ '' } %>
+  host: localhost
+  port: 5432
+  database: stock_manage

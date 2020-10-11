@@ -14,6 +14,7 @@ class StocksController < ApplicationController
       f.title(text: '出庫の推移')
       f.xAxis(categories: date_col)
       f.series(name: '出庫数', data: total_col)
+      f.chart(type: "column")
     end
   end
 end
