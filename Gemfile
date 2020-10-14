@@ -67,6 +67,8 @@ gem 'wkhtmltopdf-binary'
 gem 'wicked_pdf'
 # 祝日
 gem 'business_time'
+
+# postgresql
 group :production, :production_docker do
   gem 'pg', '>= 0.18', '< 2.0'
 end
