@@ -1,6 +1,6 @@
 class TopsController < ApplicationController
-  before_action :set_user_session, only: [:index]
   before_action :authenticaet_user, only: [:index]
+  before_action :set_user_session, only: [:index]
   #before_action :set_root, only: [:index]
   
   def index

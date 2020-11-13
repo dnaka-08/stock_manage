@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
   include UsersHelper
   before_action :set_user
+  before_action :authenticaet_user, only: [:set_user_session]
   
   MICROSOFT_TYPE_GROUP = "#microsoft.graph.group"
 
