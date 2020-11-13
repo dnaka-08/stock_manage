@@ -1,6 +1,7 @@
 class DistributesController < ApplicationController
-  before_action :require_user_logged_in
-  before_action :set_root, only: [:new]
+  before_action :authenticaet_user
+  before_action :require_admin_user
+  #before_action :set_root, only: [:new]
   before_action :set_user_session, only: [:new]
   before_action :register_check, only: [:create]
 
@@ -18,7 +19,7 @@ class DistributesController < ApplicationController
           date: "#{params["date(1i)"]}-#{params["date(2i)"]}-#{params["date(3i)"]}",
           operation_id: 1,
           number: params["num_#{i}"],
-          user_id: session[:user_id]
+          user_name: session[:user_name]
         )
         
         @result = @stock_detail.save
@@ -124,7 +125,7 @@ class DistributesController < ApplicationController
           return
         end
         #１以上チェック
-        if params["num_#{j}"].to_i > 0
+        if params["num_#{j}"].to_i < 0
           flash[:danger] = '１以上を指定してください。'
           redirect_back(fallback_location: root_path)
           return

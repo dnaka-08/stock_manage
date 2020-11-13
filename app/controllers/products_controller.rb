@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
-  before_action :require_user_logged_in
+  before_action :authenticaet_user
   before_action :require_admin_user
-  before_action :set_root, only: [:index, :new, :edit]
+  #before_action :set_root, only: [:index, :new, :edit]
   before_action :set_user_session, only: [:index, :new, :edit]
   before_action :set_product, only: [:edit, :update, :destroy]
 

@@ -1,7 +1,7 @@
 class StoresController < ApplicationController
-  before_action :require_user_logged_in
+  before_action :authenticaet_user
   before_action :require_admin_user
-  before_action :set_root, only: [:index, :new, :edit]
+  #before_action :set_root, only: [:index, :new, :edit]
   before_action :set_store, only: [:edit, :update, :destroy]
   before_action :set_user_session, only: [:index, :new, :edit]
 
@@ -14,14 +14,15 @@ class StoresController < ApplicationController
   end
 
   def create
-    @store = Store.new(store_params)
-    
-    if @store.save
-      flash[:success] = '店舗を登録しました。'
-      redirect_to stores_path
+    @store = Store.new(name: store_params["name"])
+    if @store.save 
+      @api_rec = make_api_call('post', '/v1.0/groups', access_token, {'displayName': "#{ENV['ENVIRONMENT']}_#{store_params["name"]}", "mailEnabled": "false", "mailNickname": ENV['ENVIRONMENT'], "securityEnabled": "true" })
+      @api_rec_add_group = make_api_call('post', "/v1.0/groups/#{ENV['ADMIN_GROUP']}/members/$ref", access_token, {'@odata.id': "https://graph.microsoft.com/v1.0/groups/#{@api_rec["id"]}"})
+      if @store.update(ad_id: @api_rec["id"]) and @api_rec and @api_rec_add_group["error"].nil?
+        flash[:success] = '店舗を登録しました。'
+        redirect_to stores_path
+      end
     else
-      set_root
-      set_user_session
       flash[:danger] = '店舗の登録に失敗しました。'
       render :new
     end  
@@ -41,8 +42,8 @@ class StoresController < ApplicationController
   end
 
   def destroy
-
-    if @store.destroy
+    @api_rec_del_group = make_api_call('delete', "/v1.0/groups/#{@store.ad_id}", access_token)
+    if @store.destroy and @api_rec_del_group["error"].nil?
       flash[:success] = '正常に削除されました。'
       redirect_back(fallback_location: root_path)
     else

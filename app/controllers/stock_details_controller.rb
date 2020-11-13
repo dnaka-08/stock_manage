@@ -1,6 +1,5 @@
 class StockDetailsController < ApplicationController
-  before_action :require_user_logged_in
-  before_action :set_root, only: [:index, :new, :create]
+  before_action :authenticaet_user
   before_action :set_user_session, only: [:index, :new, :create]
   before_action :set_stock_detail, only: [:destroy]
   before_action :register_check, only: [:create]
@@ -89,7 +88,7 @@ class StockDetailsController < ApplicationController
         if number.to_i > 0 and number != ""
           @stock_detail = StockDetail.new(store_id: params[:stock_detail]["store_id"], product_id: params[:stock_detail]["product_id"], \
           date: params[:stock_detail]["date(1i)"] + "-" + params[:stock_detail]["date(2i)"] + "-" + params[:stock_detail]["date(3i)"], \
-          operation_id: operation_id, number: number, user_id: params[:stock_detail]["user_id"])
+          operation_id: operation_id, number: number, user_name: params[:stock_detail]["user_name"])
           if @stock_detail.save
             @stock = Stock.where('store_id = ? and product_id = ? and date = ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date)
             @stock_before = Stock.where('store_id = ? and product_id = ? and date < ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date).order(date: :desc).first

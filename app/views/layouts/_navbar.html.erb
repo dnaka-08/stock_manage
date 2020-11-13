@@ -7,22 +7,16 @@
     
     <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
       <ul class="navbar-nav">
-        <% if logged_in? %>
+        <% if logged_in_saml? %>
           <li class="nav-item"><%= link_to '在庫登録', new_stock_detail_path, class: 'nav-link' %></li>
-          <% if @root.admin %>
+          <% if @user_admin %>
             <li class="nav-item"><%= link_to '入庫一括登録', new_distribute_path, class: 'nav-link' %></li>
-          <% end %>
-          <% if @user.id != nil %>
-            <li class="nav-item"><%= link_to 'ユーザ情報編集', edit_user_path(@user), class: 'nav-link' %></li>
-          <% end %>
-          <% if @root.admin %>
             <li class="nav-item"><%= link_to '在庫管理表', product_select_index_path(params: {screen_id: 1}), class: 'nav-link' %></li>
             <li class="nav-item"><%= link_to '出庫管理表', product_select_index_path(params: {screen_id: 2}), class: 'nav-link' %></li>
-            <li class="nav-item"><%= link_to 'ユーザ管理', users_path, class: 'nav-link' %></li>
             <li class="nav-item"><%= link_to '店舗管理', stores_path, class: 'nav-link' %></li>
             <li class="nav-item"><%= link_to '商品管理', products_path, class: 'nav-link' %></li>
           <% end %>
-          <li class="nav-item"><%= link_to 'ログアウト', logout_path, method: :delete, class: 'nav-link' %></li>
+          <li class="nav-item"><%= link_to 'ログアウト', {:controller => :auth, :action => :signout}, class: 'nav-link' %></li>
         <% end %>
       </ul>
     </div>

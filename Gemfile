@@ -68,6 +68,16 @@ gem 'wicked_pdf'
 # 祝日
 gem 'business_time'
 
+gem 'dotenv-rails'
+# OAuth
+gem 'omniauth-oauth2', '~> 1.6'
+# OmniAuth CSRF protection
+gem 'omniauth-rails_csrf_protection', '~> 0.1.2'
+# REST calls to Microsoft Graph
+gem 'httparty', '~> 0.17.1'
+# Session storage in database
+gem 'activerecord-session_store', '~> 1.1'
+
 # postgresql
 group :production, :production_docker do
   gem 'pg', '>= 0.18', '< 2.0'

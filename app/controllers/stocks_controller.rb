@@ -1,6 +1,6 @@
 class StocksController < ApplicationController
-  before_action :require_user_logged_in
-  before_action :set_root, only: [:index]
+  before_action :authenticaet_user
+  #before_action :set_root, only: [:index]
   before_action :set_user_session, only: [:index]
 
   def index

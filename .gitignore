@@ -25,3 +25,5 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+# Azure関連の環境変数
+/config/oauth_environment_variables.rb
