@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
   def get_user_target_store
     api_rec = make_api_call('get', "/v1.0/groups/#{ENV['ADMIN_GROUP']}/members", access_token, {'$count': 'true'})
     api_rec["value"].each do |rec|
-      if rec["id"] == @user_id
+      if get_user_admin
         session[:user_target_store] = []
         break
       else
