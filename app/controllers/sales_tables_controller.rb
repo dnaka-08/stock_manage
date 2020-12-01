@@ -56,8 +56,8 @@ class SalesTablesController < ApplicationController
     .group("stock_details.date")\
     .select("stock_details.date as date, sum(stock_details.price) as stock_price_day_sale_total")\
     .order("product_id").order("date")
-    @stock_detail_price_all_sale_total = StockDetail.where("stock_details.date >= ? and stock_details.date <= ? and stock_details.operation_id = ?", @date_begin, @date_end, 2)\
-    .select("sum(stock_details.price) as stock_price_all_sale_total")
+    @stock_detail_price_all_sale_total = StockDetail.where("date >= ? and date <= ? and operation_id = ?", @date_begin, @date_end, 2)\
+    .select("sum(price) as stock_price_all_sale_total")
     
     @store = StockDetail.joins(:store).where("date >= ? and date <= ?", @date_begin, @date_end).select("stores.name as store_name").distinct
     @product = Product.all
