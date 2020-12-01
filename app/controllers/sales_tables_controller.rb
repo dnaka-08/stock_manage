@@ -183,7 +183,7 @@ class SalesTablesController < ApplicationController
     @mng_rec = {}
     @mng_rec.store("store", "売上合計")
     @mng_rec.store("product", "")
-    @mng_rec.store("total", @stock_detail_price_all_sale_total.first.stock_price_all_sale_total)
+    @mng_rec.store("total", @stock_detail_price_all_sale_total.take.stock_price_all_sale_total)
 
     (Date.parse(@date_begin)..Date.parse(@date_end)).each do |date|
       @stock_detail_price_day_sale_total.each do |stock_detail|
