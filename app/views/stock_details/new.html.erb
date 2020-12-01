@@ -1,10 +1,10 @@
 <div class="row justify-content-center">
-  <div class="col-sm-6 offset-sm-2">
+  <div class="col-sm-7 offset-sm-2">
     <%= form_with(model: @stock_detail, local: true) do |f| %>
       <%= render 'layouts/error_messages', model: f.object %>
     
       <div class="form-group">
-        <%= f.label :store_id, '対象店舗：' %>
+        <%= f.label :store_id, '対象店舗：', class: 'col-sm-3 justify-content-start' %>
         <% if @user_admin %>
           <%= f.collection_select :store_id, Store.all, :id, :name, :include_blank => true %>
         <% else %>
@@ -12,31 +12,31 @@
         <% end %>
       </div>
       <div class="form-group">
-        <%= f.label :product_id, '対象商品：' %>
+        <%= f.label :product_id, '対象商品：', class: 'col-sm-3 justify-content-start' %>
         <%= f.collection_select :product_id, Product.all, :id, :name, :include_blank => true %>
       </div>
       <div class="form-group">
-        <%= f.label :date, '日付：' %>
+        <%= f.label :date, '日付：', class: 'col-sm-3 justify-content-start' %>
         <%= f.date_select :date, class: 'form-control', :use_month_numbers => true %>
       </div>
 
       <div class="form-group">
         <div class="form-inline">
-          <%= f.label :number, '入庫数：' %>
+          <%= f.label :number, '入庫数：', class: 'col-sm-3 justify-content-start' %>
           <%= f.text_field :in_number, class: 'form-control', value: @in_number %>
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group mt-3">
         <div class="form-inline">
-          <%= f.label :number, '出庫数：' %>
-          <%= f.text_field :out_number, class: 'form-control', value: @out_number %>
-        </div>
+          <%= f.label :number, '出庫数/単価：', class: 'col-sm-3 justify-content-start' %>
+          <%= f.text_field :out_number, class: 'form-control mr-2', value: @out_number %>
+          <%= f.text_field :unit_price, class: 'form-control', value: @unit_price %>
       </div>
 
-      <div class="form-group">
+      <div class="form-group mt-3">
         <div class="form-inline">
-          <%= f.label :number, '破棄数：' %>
+          <%= f.label :number, '破棄数：', class: 'col-sm-3 justify-content-start' %>
           <%= f.text_field :drop_number, class: 'form-control', value: @drop_number %>
         </div>
       </div>
@@ -44,7 +44,7 @@
       <%= f.hidden_field :user_name, :value => session[:user_name] %>
       <%= f.hidden_field :update_flg, :value => @update_flg %>
 
-      <%= f.submit @button_name, class: 'btn btn-primary btn-block col-sm-6' %>
+      <%= f.submit @button_name, class: 'btn btn-primary btn-block col-sm-7' %>
     <% end %>
   </div>
 </div>

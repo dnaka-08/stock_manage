@@ -30,6 +30,7 @@ class StockDetailsController < ApplicationController
           @in_number = @in_number + rec.number
         elsif rec.operation_id == 2
           @out_number = @out_number + rec.number
+          @unit_price = rec.unit_price
         elsif rec.operation_id == 3
           @drop_number = @drop_number + rec.number
         end
@@ -84,11 +85,21 @@ class StockDetailsController < ApplicationController
       if params[:stock_detail]["in_number"] == "0" and params[:stock_detail]["out_number"] == "0" and params[:stock_detail]["drop_number"] == "0"
         result = true
       end
+      i = 0 #各在庫数等のカウント
       for number in [params[:stock_detail]["in_number"], params[:stock_detail]["out_number"], params[:stock_detail]["drop_number"]]
         if number.to_i > 0 and number != ""
+          i = i + 1
+          if i == 2
+            if params[:stock_detail]["unit_price"].nil? or params[:stock_detail]["unit_price"] == ""
+              params[:stock_detail]["unit_price"] = 0
+            end
+            @unit_price = params[:stock_detail]["unit_price"]
+          else
+            @unit_price = 0
+          end
           @stock_detail = StockDetail.new(store_id: params[:stock_detail]["store_id"], product_id: params[:stock_detail]["product_id"], \
           date: params[:stock_detail]["date(1i)"] + "-" + params[:stock_detail]["date(2i)"] + "-" + params[:stock_detail]["date(3i)"], \
-          operation_id: operation_id, number: number, user_name: params[:stock_detail]["user_name"])
+          operation_id: operation_id, number: number, user_name: params[:stock_detail]["user_name"], unit_price: @unit_price, price: number.to_i * @unit_price.to_i)
           if @stock_detail.save
             @stock = Stock.where('store_id = ? and product_id = ? and date = ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date)
             @stock_before = Stock.where('store_id = ? and product_id = ? and date < ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date).order(date: :desc).first
@@ -258,6 +269,13 @@ class StockDetailsController < ApplicationController
     #破棄数数値チェック
     if params[:stock_detail]["drop_number"] != "" and params[:stock_detail]["drop_number"] !~ /^[0-9]+$/
       flash[:danger] = '破棄数には数値を指定してください。'
+      redirect_back(fallback_location: root_path)
+      return
+    end    
+
+    #単価数値チェック
+    if params[:stock_detail]["unit_price"] != "" and params[:stock_detail]["unit_price"] !~ /^[0-9]+$/
+      flash[:danger] = '単価には数値を指定してください。'
       redirect_back(fallback_location: root_path)
       return
     end    

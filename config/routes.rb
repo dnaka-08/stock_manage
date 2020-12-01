@@ -22,5 +22,6 @@ Rails.application.routes.draw do
   resources :distributes, only:[:new, :create]
   resources :product_select, only:[:index]
   resources :login, only:[:index]
+  resources :sales_tables, only:[:index]
   
 end
