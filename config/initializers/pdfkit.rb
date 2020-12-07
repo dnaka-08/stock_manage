@@ -9,6 +9,6 @@ PDFKit.configure do |config|
     margin_left:             "0.5in",
     orientation:             "Landscape",
     lowquality:              true,  
-    disable_smart_shrinking: false
+    disable_smart_shrinking: true
   }
 end

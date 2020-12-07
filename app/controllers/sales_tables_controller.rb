@@ -197,5 +197,19 @@ class SalesTablesController < ApplicationController
     end
     @mng_price_table.push(@mng_rec)
     
+    respond_to do |format|
+      format.html
+      format.pdf do
+        html = render_to_string template: "sales_tables/index"
+        pdf = PDFKit.new(html, encoding: "UTF-8")
+        pdf.stylesheets << "#{Rails.root}/app/assets/stylesheets/bootstrap.min.css"
+        send_data pdf.to_pdf,
+          filename: "売上管理表_#{Time.zone.now.strftime('%Y%m%d%H%M%S')}.pdf",
+          type: "application/pdf",
+          disposition: "inline"
+      end
+    end    
+    
+    
   end
 end
