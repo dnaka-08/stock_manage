@@ -34,7 +34,7 @@ class DistributesController < ApplicationController
               @stock_before.with_lock do
                 if @stock_detail.operation_id == 1
                   # 入庫
-                  @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number, stock_number: @stock_before.stock_number + @stock_detail.number)
+                  @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number, stock_number: @stock_before.stock_number + @stock_detail.number, out_number: 0)
                   @stock_after.update_all("stock_number = stock_number + #{@stock_detail.number}")
                 else
                   # 入庫以外
@@ -46,7 +46,7 @@ class DistributesController < ApplicationController
               # 前日以前の在庫なし
               if @stock_detail.operation_id == 1
                 # 入庫
-                @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number, stock_number: @stock_detail.number)
+                @stock = Stock.create(store_id: @stock_detail.store_id, product_id: @stock_detail.product_id, date: @stock_detail.date, total_number: @stock_detail.number, stock_number: @stock_detail.number, out_number: 0)
                 @stock_after.update_all("stock_number = stock_number + #{@stock_detail.number}")
               else
                 # 入庫以外
