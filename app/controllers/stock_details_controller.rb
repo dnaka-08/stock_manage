@@ -30,7 +30,7 @@ class StockDetailsController < ApplicationController
           @in_number = @in_number + rec.number
         elsif rec.operation_id == 2
           @out_number = @out_number + rec.number
-          @unit_price = rec.unit_price
+          @unit_price = rec.price
         elsif rec.operation_id == 3
           @drop_number = @drop_number + rec.number
         end
@@ -99,8 +99,7 @@ class StockDetailsController < ApplicationController
           end
           @stock_detail = StockDetail.new(store_id: params[:stock_detail]["store_id"], product_id: params[:stock_detail]["product_id"], \
           date: params[:stock_detail]["date(1i)"] + "-" + params[:stock_detail]["date(2i)"] + "-" + params[:stock_detail]["date(3i)"], \
-          operation_id: operation_id, number: number, user_name: params[:stock_detail]["user_name"], unit_price: @unit_price, price: number.to_i * @unit_price.to_i)
-          puts "【price】:#{@stock_detail.price}"
+          operation_id: operation_id, number: number, user_name: params[:stock_detail]["user_name"], unit_price: @unit_price, price: @unit_price)
           if @stock_detail.save
             @stock = Stock.where('store_id = ? and product_id = ? and date = ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date)
             @stock_before = Stock.where('store_id = ? and product_id = ? and date < ?', @stock_detail.store_id, @stock_detail.product_id, @stock_detail.date).order(date: :desc).first
