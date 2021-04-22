@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.5'
+ruby '2.6.6'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.5'
+gem 'rails', '~> 6.0.3.4'
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.4.4', '< 0.6.0'
 # Use Puma as the app server
@@ -70,13 +70,13 @@ gem 'business_time'
 
 gem 'dotenv-rails'
 # OAuth
-gem 'omniauth-oauth2', '~> 1.6'
+gem 'omniauth-oauth2', '~> 1.7'
 # OmniAuth CSRF protection
-gem 'omniauth-rails_csrf_protection', '~> 0.1.2'
+gem 'omniauth-rails_csrf_protection'
 # REST calls to Microsoft Graph
-gem 'httparty', '~> 0.17.1'
+gem 'httparty', '~> 0.18.1'
 # Session storage in database
-gem 'activerecord-session_store', '~> 1.1'
+gem 'activerecord-session_store', '~> 1.1.3'
 
 # postgresql
 group :production, :production_docker do
