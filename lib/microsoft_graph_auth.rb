@@ -7,7 +7,8 @@ module OmniAuth
     class MicrosoftGraphAuth < OmniAuth::Strategies::OAuth2
       option :name, :microsoft_graph_auth
 
-      DEFAULT_SCOPE = 'offline_access openid email profile User.Read'.freeze
+#      DEFAULT_SCOPE = 'offline_access openid email profile User.Read'.freeze
+      DEFAULT_SCOPE = 'offline_access openid email profile User.Read User.ReadWrite.All Directory.ReadWrite.All Directory.AccessAsUser.All'.freeze
 
       # Configure the Microsoft identity platform endpoints
       option :client_options,
