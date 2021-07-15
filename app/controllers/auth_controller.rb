@@ -14,6 +14,7 @@ class AuthController < ApplicationController
   # <SignOutSnippet>
   def signout
     @api_rec = make_api_call('post', "/v1.0/users/#{session[:id]}/revokeSignInSessions", access_token, nil)
+    puts @api_rec
     reset_session
     redirect_to login_index_path
   end
