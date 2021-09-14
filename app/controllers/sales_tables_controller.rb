@@ -71,7 +71,7 @@ class SalesTablesController < ApplicationController
         @mng_rec.store("product", product.name)
         @stock_detail_num_total.each do |total|
           if store.store_name == total.store_name and product.id == total.product_id
-            @mng_rec.store("total", total.stock_num_total)
+            @mng_rec.store("total", total.stock_num_total.to_s(:delimited, delimiter: ','))
             break
           end
         end
@@ -82,7 +82,7 @@ class SalesTablesController < ApplicationController
         (Date.parse(@date_begin)..Date.parse(@date_end)).each do |date|
           @stock_detail.each do |stock_detail|
             if stock_detail.date == date and stock_detail.store_name == store.store_name and product.id == stock_detail.product_id
-              @mng_rec.store(date, stock_detail.stock_sum)
+              @mng_rec.store(date, stock_detail.stock_sum.to_s(:delimited, delimiter: ','))
               break
             else
               @mng_rec.store(date, 0)
@@ -100,7 +100,7 @@ class SalesTablesController < ApplicationController
       @mng_rec.store("product", product.name)
       @stock_detail_num_all_total.each do |total|
         if product.id == total.product_id
-          @mng_rec.store("total", total.stock_num_all_total)
+          @mng_rec.store("total", total.stock_num_all_total.to_s(:delimited, delimiter: ','))
           break
         end
       end
@@ -111,7 +111,7 @@ class SalesTablesController < ApplicationController
       (Date.parse(@date_begin)..Date.parse(@date_end)).each do |date|
         @stock_detail_num_day_total.each do |stock_detail|
           if stock_detail.date == date and product.id == stock_detail.product_id
-            @mng_rec.store(date, stock_detail.stock_sum_day_total)
+            @mng_rec.store(date, stock_detail.stock_sum_day_total.to_s(:delimited, delimiter: ','))
             break
           else
             @mng_rec.store(date, 0)
@@ -130,7 +130,7 @@ class SalesTablesController < ApplicationController
         @mng_rec.store("product", product.name)
         @stock_detail_price_total.each do |total|
           if store.store_name == total.store_name and product.id == total.product_id
-            @mng_rec.store("total", total.stock_price_total)
+            @mng_rec.store("total", total.stock_price_total.to_s(:delimited, delimiter: ','))
             break
           end
         end
@@ -141,7 +141,8 @@ class SalesTablesController < ApplicationController
         (Date.parse(@date_begin)..Date.parse(@date_end)).each do |date|
           @stock_detail_price.each do |stock_detail|
             if stock_detail.date == date and stock_detail.store_name == store.store_name and product.id == stock_detail.product_id
-              @mng_rec.store(date, stock_detail.stock_price)
+              @mng_rec.store(date, stock_detail.stock_price.to_s(:delimited, delimiter: ','))
+              
               break
             else
               @mng_rec.store(date, 0)
@@ -159,7 +160,7 @@ class SalesTablesController < ApplicationController
       @mng_rec.store("product", product.name)
       @stock_detail_price_all_total.each do |total|
         if product.id == total.product_id
-          @mng_rec.store("total", total.stock_price_all_total)
+          @mng_rec.store("total", total.stock_price_all_total.to_s(:delimited, delimiter: ','))
           break
         end
       end
@@ -170,7 +171,7 @@ class SalesTablesController < ApplicationController
       (Date.parse(@date_begin)..Date.parse(@date_end)).each do |date|
         @stock_detail_price_day_total.each do |stock_detail|
           if stock_detail.date == date and product.id == stock_detail.product_id
-            @mng_rec.store(date, stock_detail.stock_price_day_total)
+            @mng_rec.store(date, stock_detail.stock_price_day_total.to_s(:delimited, delimiter: ','))
             break
           else
             @mng_rec.store(date, 0)
@@ -183,12 +184,17 @@ class SalesTablesController < ApplicationController
     @mng_rec = {}
     @mng_rec.store("store", "売上合計")
     @mng_rec.store("product", "")
-    @mng_rec.store("total", @stock_detail_price_all_sale_total.take.stock_price_all_sale_total)
+    
+    if @stock_detail_price_all_sale_total.take.stock_price_all_sale_total.nil?
+      @mng_rec.store("total", 0)
+    else
+      @mng_rec.store("total", @stock_detail_price_all_sale_total.take.stock_price_all_sale_total.to_s(:delimited, delimiter: ','))
+    end
 
     (Date.parse(@date_begin)..Date.parse(@date_end)).each do |date|
       @stock_detail_price_day_sale_total.each do |stock_detail|
         if stock_detail.date == date
-          @mng_rec.store(date, stock_detail.stock_price_day_sale_total)
+          @mng_rec.store(date, stock_detail.stock_price_day_sale_total.to_s(:delimited, delimiter: ','))
           break
         else
           @mng_rec.store(date, 0)
