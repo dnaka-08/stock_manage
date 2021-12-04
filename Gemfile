@@ -76,7 +76,7 @@ gem 'omniauth-rails_csrf_protection'
 # REST calls to Microsoft Graph
 gem 'httparty', '~> 0.18.1'
 # Session storage in database
-gem 'activerecord-session_store', '~> 1.1.3'
+gem 'activerecord-session_store', '~> 2.0.0'
 
 # postgresql
 group :production, :production_docker do
